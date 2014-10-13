@@ -1,6 +1,6 @@
 <?php
 /* 
-** Instagram PHP SDK 1.0.0
+** Instagram PHP SDK 1.0.0.1
 ** Autor: Daniel Trolezi
 */
 
@@ -47,6 +47,14 @@ class Instagram {
 		$url = 'https://api.instagram.com/oauth/authorize/?client_id='.$this->client_id.'&redirect_uri='.$this->redirect_uri.'&response_type=code';	
 		if($scope != null) $url .= '&scope='.$scope;
 		header('Location: '.$url);
+	}
+	
+	/* Retorna informação sobre o usuário 
+	** @param string $user_id */
+	public function getUser($user_id){
+		$endpoint = 'https://api.instagram.com/v1/users/'.$user_id.'/?access_token='.$this->access_token;
+		$result = $this->curl($endpoint);
+		return json_decode($result, true);	
 	}
 	
 	/* Retorna os posts recentes do usuário
@@ -103,6 +111,7 @@ class Instagram {
 	** @param string $min_tag_id */
 	public function getSearch($params = array()){
 		$config = array(
+			'count' => '',
 			'tag_name' => '',
 			'min_tag_id' => ''
 		);
@@ -113,7 +122,9 @@ class Instagram {
 		}
 		
 		$endpoint = 'https://api.instagram.com/v1/tags/'.$tag_name.'/media/recent?client_id='.$this->client_id;
-		if ($min_tag_id != null) $endpoint .= '&min_tag_id='.$min_tag_id;
+		if($count != null) $endpoint .= '&count='.$count;
+		if($min_tag_id != null) $endpoint .= '&min_tag_id='.$min_tag_id;
+		
 		$result = $this->curl($endpoint);
 		return json_decode($result, true);	
 	}
