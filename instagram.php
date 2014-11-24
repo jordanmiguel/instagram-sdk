@@ -1,6 +1,6 @@
 <?php
 /* 
-** Instagram PHP SDK 1.0.0.1
+** Instagram PHP SDK 1.0.0.2
 ** Autor: Daniel Trolezi
 */
 
@@ -121,7 +121,11 @@ class Instagram {
 			extract($config, EXTR_OVERWRITE);	
 		}
 		
-		$endpoint = 'https://api.instagram.com/v1/tags/'.$tag_name.'/media/recent?client_id='.$this->client_id;
+		$endpoint = 'https://api.instagram.com/v1/tags/'.$tag_name.'/media/recent';
+		
+		if($this->access_token != null) $endpoint .= '?access_token='.$this->access_token;
+		else $endpoint .= '?client_id='.$this->client_id;
+		
 		if($count != null) $endpoint .= '&count='.$count;
 		if($min_tag_id != null) $endpoint .= '&min_tag_id='.$min_tag_id;
 		
