@@ -1,6 +1,6 @@
 <?php
 /* 
-** Instagram PHP SDK 1.0.0.3
+** Instagram PHP SDK 1.0.3
 ** Autor: Daniel Trolezi
 */
 
