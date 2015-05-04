@@ -1,0 +1,16 @@
+{
+    "name": "danieltrolezi/instagram-sdk",
+    "description": "A simple SDK from Instagram API",
+	"version": "1.0.3",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Daniel Trolezi",
+            "email": "danieltrolezi@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+		"php": ">=5.3.0"	
+	}
+}
