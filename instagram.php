@@ -1,6 +1,6 @@
 <?php
 /* 
-** Instagram PHP SDK 1.0.0.2
+** Instagram PHP SDK 1.0.0.3
 ** Autor: Daniel Trolezi
 */
 
@@ -25,7 +25,7 @@ class Instagram {
 	// API FUNCTIONS 
 	
 	// Retorna um Access Token válido
-	public function getAccessToken($code){		
+	public function getAccessToken($code){	
 		$url = 'https://api.instagram.com/oauth/access_token';
 		
 		$data = array(
@@ -75,7 +75,9 @@ class Instagram {
 			extract($config, EXTR_OVERWRITE);	
 		}
  	
-		$endpoint = 'https://api.instagram.com/v1/users/'.$user_id.'/media/recent/?access_token='.$this->access_token;
+		$endpoint = 'https://api.instagram.com/v1/users/'.$user_id.'/media/recent/';
+		if($this->access_token != null) $endpoint .= '?access_token='.$this->access_token;
+		else $endpoint .= '?client_id='.$this->client_id;
 		if(!empty($count)) $endpoint .= '&count='.$count;
 		if(!empty($min_timestamp)) $endpoint .= '&min_timestamp='.$min_timestamp;
 		if(!empty($min_id)) $endpoint .= '&min_id='.$min_id;
@@ -122,10 +124,8 @@ class Instagram {
 		}
 		
 		$endpoint = 'https://api.instagram.com/v1/tags/'.$tag_name.'/media/recent';
-		
 		if($this->access_token != null) $endpoint .= '?access_token='.$this->access_token;
-		else $endpoint .= '?client_id='.$this->client_id;
-		
+		else $endpoint .= '?client_id='.$this->client_id;		
 		if($count != null) $endpoint .= '&count='.$count;
 		if($min_tag_id != null) $endpoint .= '&min_tag_id='.$min_tag_id;
 		
