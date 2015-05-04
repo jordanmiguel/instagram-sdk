@@ -1,7 +1,6 @@
 {
     "name": "danieltrolezi/instagram-sdk",
     "description": "A simple SDK from Instagram API",
-	"version": "1.0.3",
     "type": "library",
     "authors": [
         {
