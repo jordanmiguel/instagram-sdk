@@ -1,6 +1,6 @@
 {
     "name": "danieltrolezi/instagram-sdk",
-    "description": "A simple SDK for Instagram API",
+    "description": "A simple PHP SDK for Instagram API. Provides a wrapper for making both public and authenticated requests.",
     "type": "library",
     "authors": [
         {
