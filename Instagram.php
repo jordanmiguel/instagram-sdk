@@ -7,7 +7,7 @@
  *
  * @package instagram-sdk
  * @author Daniel Trolezi <danieltrolezi@outlook.com>
- * @version 2.0.3
+ * @version 2.0.4
  */
 
 class InstagramException extends Exception {}
@@ -100,7 +100,7 @@ class Instagram {
 			$result = json_decode($result, true);
 
 			if(isset($result['error_message']))
-				throw new InstagramException($result['error_message'], $result['error_code']);
+				throw new InstagramException($result['error_message'], $result['code']);
 
 			$this->access_token = $result['access_token'];
 			return $this->access_token;
@@ -119,7 +119,7 @@ class Instagram {
 	 */
 	public function getLoginURL($scope = 'basic')
 	{
-		if(!$this->redirect_uri) throw new Exception('You must provide a "redirect_uri".', 400);
+		if(!$this->redirect_uri) throw new InstagramException('You must provide a "redirect_uri".', 400);
 		return $this->auth_url.'?client_id='.$this->client_id.'&redirect_uri='.$this->redirect_uri.'&response_type=code&scope='.$scope;
 	}
 
