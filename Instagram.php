@@ -3,11 +3,12 @@
  * Instagram SDK
  * A simple PHP SDK for Instagram API. Provides a wrapper for making both
  * public and authenticated requests.
+ *
  * You can read about the Instagram API here: https://instagram.com/developer/
  *
  * @package instagram-sdk
  * @author Daniel Trolezi <danieltrolezi@outlook.com>
- * @version 2.0.4
+ * @version 2.0.5
  */
 
 class InstagramException extends Exception {}
@@ -50,7 +51,8 @@ class Instagram {
 	public $access_token;
 
 	/**
-	 * Constructor for the API
+	 * Constructor for the API.
+	 *
 	 * @param string $client_id
 	 * @param string $client_secret
 	 */
@@ -62,7 +64,8 @@ class Instagram {
 
 	/**
 	 * Set the redirect uri, which is required to get
-	 * the login url and get the access token
+	 * the login url and get the access token.
+	 *
 	 * @param $redirect_uri
 	 */
 	public function setRedirectUri($redirect_uri)
@@ -71,7 +74,8 @@ class Instagram {
 	}
 
 	/**
-	 * Set the Access Token
+	 * Set the Access Token.
+	 *
 	 * @param string $access_token
 	 */
 	public function setAccessToken($access_token)
@@ -80,7 +84,8 @@ class Instagram {
 	}
 
 	/**
-	 * Return a valid Access Token or the one that is being used by the object
+	 * Return a valid Access Token or the one that is being used by the object.
+	 *
 	 * @param string $code
 	 * @return string
 	 * @throws InstagramException
@@ -112,7 +117,8 @@ class Instagram {
 	}
 
 	/**
-	 * Returns the login URL
+	 * Returns the login URL.
+	 *
 	 * @param string $scope
 	 * @return string
 	 * @throws Exception
@@ -124,8 +130,9 @@ class Instagram {
 	}
 
 	/**
-	 * Make both public and authenticated requests to the API
-	 * @param string $endpoint ex: /users/{user-id|username|self}/media/recent
+	 * Make both public and authenticated requests to the API.
+	 *
+	 * @param string $endpoint - e.g: /users/{user-id|username|self}/media/recent
 	 * @param array $params
 	 * @return mixed
 	 * @throws InstagramException
@@ -156,15 +163,15 @@ class Instagram {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		//curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+
+		if(isset($_SERVER["HTTP_USER_AGENT"]))
+		    curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+
 		curl_setopt($ch, CURLOPT_VERBOSE, 0);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_REFERER, $url);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-		//curl_setopt($ch, CURLOPT_COOKIEFILE, 'cookie.txt');
-		//curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
 		curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
 
