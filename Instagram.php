@@ -8,13 +8,11 @@
  *
  * @package instagram-sdk
  * @author Daniel Trolezi <danieltrolezi@outlook.com>
- * @version 2.0.6
+ * @version 2.0.7
  */
 
-class InstagramException extends Exception {}
-
-class Instagram {
-
+class Instagram
+{
 	/**
 	 * @var string
 	 */
@@ -88,8 +86,9 @@ class Instagram {
 	 *
 	 * @param string $code
 	 * @return string
-	 * @throws InstagramException
-	 */
+     * @throws Exception
+     * @throws InstagramException
+     */
 	public function getAccessToken($code = null)
 	{
 		if($code){
@@ -105,7 +104,7 @@ class Instagram {
 			$result = json_decode($result, true);
 
 			if(isset($result['error_message'])) {
-                throw new InstagramException($result['error_message'], $result['code']);
+                throw new InstagramException($result['error_message'], $result['error_type'], $result['code']);
             }
 
 			$this->access_token = $result['access_token'];
@@ -113,7 +112,7 @@ class Instagram {
 		} else if($this->access_token){
 			return $this->access_token;
 		} else {
-			throw new InstagramException('You must provide the "code" resulting from the login webflow.', 400);
+			throw new Exception('You must provide the "code" resulting from the login webflow.', 400);
 		}
 	}
 
@@ -127,7 +126,7 @@ class Instagram {
 	public function getLoginURL($scope = 'basic')
 	{
 		if(!$this->redirect_uri) {
-			throw new InstagramException('You must provide a "redirect_uri".', 400);
+			throw new Exception('You must provide a "redirect_uri".', 400);
 		}
 
 		return $this->auth_url.'?client_id='.$this->client_id.'&redirect_uri='.$this->redirect_uri.'&response_type=code&scope='.$scope;
@@ -155,7 +154,7 @@ class Instagram {
 		$result = json_decode($result, true);
 
 		if(isset($result['meta']['error_message'])) {
-            throw new InstagramException($result['meta']['error_message'], $result['meta']['code']);
+            throw new InstagramException($result['meta']['error_message'], $result['meta']['error_type'], $result['meta']['code']);
         }
 
 		return $result;
@@ -194,4 +193,26 @@ class Instagram {
 		return $result;
 	}
 }
-?>
+
+class InstagramException extends Exception
+{
+    /**
+     * @var string
+     */
+    public $type;
+
+    public function __construct($message, $type, $code, \Exception $previous = null)
+    {
+        $this->type = $type;
+        parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * Gets the Exception error type
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+}
