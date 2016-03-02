@@ -8,7 +8,7 @@
  *
  * @package instagram-sdk
  * @author Daniel Trolezi <danieltrolezi@outlook.com>
- * @version 2.0.5
+ * @version 2.0.6
  */
 
 class InstagramException extends Exception {}
@@ -104,15 +104,16 @@ class Instagram {
 			$result = $this->curl($this->token_url, $data);
 			$result = json_decode($result, true);
 
-			if(isset($result['error_message']))
-				throw new InstagramException($result['error_message'], $result['code']);
+			if(isset($result['error_message'])) {
+                throw new InstagramException($result['error_message'], $result['code']);
+            }
 
 			$this->access_token = $result['access_token'];
 			return $this->access_token;
 		} else if($this->access_token){
 			return $this->access_token;
 		} else {
-			throw new InstagramException('You must provide the "code" resulting from the login webflow.');
+			throw new InstagramException('You must provide the "code" resulting from the login webflow.', 400);
 		}
 	}
 
@@ -125,7 +126,10 @@ class Instagram {
 	 */
 	public function getLoginURL($scope = 'basic')
 	{
-		if(!$this->redirect_uri) throw new InstagramException('You must provide a "redirect_uri".', 400);
+		if(!$this->redirect_uri) {
+			throw new InstagramException('You must provide a "redirect_uri".', 400);
+		}
+
 		return $this->auth_url.'?client_id='.$this->client_id.'&redirect_uri='.$this->redirect_uri.'&response_type=code&scope='.$scope;
 	}
 
@@ -141,14 +145,18 @@ class Instagram {
 	{
 		$url = $this->base_url . trim($endpoint, "/");
 
-		if($this->access_token) $params['access_token'] = $this->access_token;
-		else $params['client_id'] = $this->client_id;
+		if($this->access_token) {
+            $params['access_token'] = $this->access_token;
+        } else{
+            $params['client_id'] = $this->client_id;
+        }
 
 		$result = $this->curl($url.'?'.http_build_query($params));
 		$result = json_decode($result, true);
 
-		if(isset($result['meta']['error_message']))
-			throw new InstagramException($result['meta']['error_message'], $result['meta']['code']);
+		if(isset($result['meta']['error_message'])) {
+            throw new InstagramException($result['meta']['error_message'], $result['meta']['code']);
+        }
 
 		return $result;
 	}
