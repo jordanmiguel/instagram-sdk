@@ -1,19 +1,19 @@
 {
-    "name": "danieltrolezi/instagram-sdk",
-    "description": "A simple PHP SDK for Instagram API. Provides a wrapper for making both public and authenticated requests.",
-    "type": "library",
-    "authors": [
-        {
-            "name": "Daniel Trolezi",
-            "email": "danieltrolezi@outlook.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-		"php": ">=5.3.0",
-		"ext-curl": "*"	
-	},
-    "autoload": {
-        "psr-0": { "Instagram": "" }
+  "name": "danieltrolezi/instagram-sdk",
+  "description": "A simple PHP SDK for Instagram API. Provides a wrapper for making both public and authenticated requests.",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Daniel Trolezi",
+      "email": "danieltrolezi@outlook.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+  	"php": ">=5.3.0",
+  	"ext-curl": "*"
+  },
+  "autoload": {
+    "psr-0": { "Instagram": "" }
+  }
 }

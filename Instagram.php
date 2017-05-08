@@ -8,7 +8,7 @@
  *
  * @package instagram-sdk
  * @author Daniel Trolezi <danieltrolezi@outlook.com>
- * @version 2.0.7
+ * @version 2.0.8
  */
 
 class Instagram
@@ -31,22 +31,22 @@ class Instagram
 	/**
 	 * @var string
 	 */
-	public $client_id;
+	protected $client_id;
 
 	/**
 	 * @var string
 	 */
-	public $client_secret;
+	protected $client_secret;
 
 	/**
 	 * @var string
 	 */
-	public $redirect_uri;
+	protected $redirect_uri;
 
 	/**
 	 * @var string
 	 */
-	public $access_token;
+	protected $access_token;
 
 	/**
 	 * Constructor for the API.
@@ -86,34 +86,34 @@ class Instagram
 	 *
 	 * @param string $code
 	 * @return string
-     * @throws Exception
-     * @throws InstagramException
-     */
+	 * @throws Exception
+	 * @throws InstagramException
+	 */
 	public function getAccessToken($code = null)
 	{
 		if($code){
-			$data = array(
+			$data = [
 				'client_id' => $this->client_id,
 				'client_secret' => $this->client_secret,
 				'grant_type' => 'authorization_code',
 				'redirect_uri' => $this->redirect_uri,
 				'code' => $code
-			);
+			];
 
 			$result = $this->curl($this->token_url, $data);
 			$result = json_decode($result, true);
 
 			if(isset($result['error_message'])) {
-                throw new InstagramException($result['error_message'], $result['error_type'], $result['code']);
-            }
+				throw new InstagramException($result['error_message'], $result['error_type'], $result['code']);
+			}
 
 			$this->access_token = $result['access_token'];
 			return $this->access_token;
 		} else if($this->access_token){
 			return $this->access_token;
-		} else {
-			throw new Exception('You must provide the "code" resulting from the login webflow.', 400);
 		}
+
+		throw new Exception('You must provide the "code" resulting from the login webflow.', 400);
 	}
 
 	/**
@@ -145,17 +145,17 @@ class Instagram
 		$url = $this->base_url . trim($endpoint, "/");
 
 		if($this->access_token) {
-            $params['access_token'] = $this->access_token;
-        } else{
-            $params['client_id'] = $this->client_id;
-        }
+			$params['access_token'] = $this->access_token;
+		} else{
+			$params['client_id'] = $this->client_id;
+		}
 
 		$result = $this->curl($url.'?'.http_build_query($params));
 		$result = json_decode($result, true);
 
 		if(isset($result['meta']['error_message'])) {
-            throw new InstagramException($result['meta']['error_message'], $result['meta']['error_type'], $result['meta']['code']);
-        }
+			throw new InstagramException($result['meta']['error_message'], $result['meta']['error_type'], $result['meta']['code']);
+		}
 
 		return $result;
 	}
@@ -172,15 +172,16 @@ class Instagram
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 
-		if(isset($_SERVER["HTTP_USER_AGENT"]))
-		    curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+		if(isset($_SERVER["HTTP_USER_AGENT"])){
+			curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+		}
 
 		curl_setopt($ch, CURLOPT_VERBOSE, 0);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_REFERER, $url);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 		curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data"));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: multipart/form-data"]);
 
 		if (!empty($data)) {
 			curl_setopt($ch, CURLOPT_POST, 1);
@@ -196,23 +197,23 @@ class Instagram
 
 class InstagramException extends Exception
 {
-    /**
-     * @var string
-     */
-    public $type;
+	/**
+	 * @var string
+	 */
+	public $type;
 
-    public function __construct($message, $type, $code, \Exception $previous = null)
-    {
-        $this->type = $type;
-        parent::__construct($message, $code, $previous);
-    }
+	public function __construct($message, $type, $code, \Exception $previous = null)
+	{
+		$this->type = $type;
+		parent::__construct($message, $code, $previous);
+	}
 
-    /**
-     * Gets the Exception error type
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
+	/**
+	 * Gets the Exception error type
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
 }
