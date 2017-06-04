@@ -1,14 +1,13 @@
 <?php
 /**
  * Instagram SDK
- * A simple PHP SDK for Instagram API. Provides a wrapper for making both
- * public and authenticated requests.
+ * A simple PHP SDK for Instagram API. Provides a wrapper for making authenticated requests.
  *
- * You can read about the Instagram API here: https://instagram.com/developer/
+ * Instagram API Oficial Docs: https://instagram.com/developer/
  *
  * @package instagram-sdk
  * @author Daniel Trolezi <danieltrolezi@outlook.com>
- * @version 2.0.8
+ * @version 2.0.9
  */
 
 class Instagram
@@ -133,7 +132,7 @@ class Instagram
 	}
 
 	/**
-	 * Make both public and authenticated requests to the API.
+	 * Make authenticated requests to the API.
 	 *
 	 * @param string $endpoint - e.g: /users/{user-id|username|self}/media/recent
 	 * @param array $params
@@ -146,8 +145,6 @@ class Instagram
 
 		if($this->access_token) {
 			$params['access_token'] = $this->access_token;
-		} else{
-			$params['client_id'] = $this->client_id;
 		}
 
 		$result = $this->curl($url.'?'.http_build_query($params));
