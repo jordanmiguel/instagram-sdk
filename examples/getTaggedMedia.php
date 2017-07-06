@@ -19,7 +19,7 @@ if(!isset($_GET['code']) && !isset($_SESSION['access_token'])){
   header('location: ' . $instagram->getLoginURL('basic+public_content'));
   exit;
 } else if(isset($_GET['code'])){
-  // Get the code resulting from the login web flow an exachange for an access token
+  // Get the code resulting from the login web flow an exchange for an access token
   $_SESSION['access_token'] = $instagram->getAccessToken($_GET['code']);
   header('location: ' . $_SERVER['PHP_SELF']);
   exit;

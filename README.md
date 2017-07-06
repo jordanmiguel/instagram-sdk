@@ -17,7 +17,7 @@ $instagram = new Instagram('CLIENT ID', 'CLIENTE SECRET');
 
 ### Authentication
 
-Any API call will required an valid access token. First, you set the same ```REDIRECT URI``` registered on the [Instagram Developer Portal](https://www.instagram.com/developer/clients/manage/). Then, you can redirect the user to the login URL.
+Any API call will require an valid access token. First, you set the same ```REDIRECT URI``` registered on the [Instagram Developer Portal](https://www.instagram.com/developer/clients/manage/). Then, you can redirect the user to the login URL.
 
 ```php
 $instagram->setRedirectUri('REDIRECT URI');
@@ -30,7 +30,7 @@ Once the user authorizes the application, Instagram will redirect to the ```REQU
 $access_token = $instagram->getAccessToken($_GET['code']);
 ```
 
-Now you can start make requests to the API. The ```getAccessToken``` method will automatically set the received access token so you don't need to the pass it in every request.
+Now you can start make requests to the API. The ```getAccessToken``` method will automatically set the received access token so you don't need to pass it in every request.
 If you chose to store the access token and make the request later, you can use the ```setAccessToken``` method.
 
 ### Making requests
