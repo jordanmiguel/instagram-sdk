@@ -7,7 +7,7 @@
  *
  * @package instagram-sdk
  * @author Daniel Trolezi <danieltrolezi@outlook.com>
- * @version 2.0.9
+ * @version 3.0
  */
 
 class Instagram
@@ -15,7 +15,7 @@ class Instagram
 	/**
 	 * @var string
 	 */
-	private $base_url = 'https://api.instagram.com/v1/';
+	private $base_url = 'https://graph.instagram.com/';
 
 	/**
 	 * @var string
@@ -30,12 +30,12 @@ class Instagram
 	/**
 	 * @var string
 	 */
-	protected $client_id;
+	protected $app_id;
 
 	/**
 	 * @var string
 	 */
-	protected $client_secret;
+	protected $app_secret;
 
 	/**
 	 * @var string
@@ -50,13 +50,13 @@ class Instagram
 	/**
 	 * Constructor for the API.
 	 *
-	 * @param string $client_id
-	 * @param string $client_secret
+	 * @param string $app_id
+	 * @param string $app_secret
 	 */
-	function __construct($client_id, $client_secret)
+	function __construct($app_id, $app_secret)
 	{
-		$this->client_id = $client_id;
-		$this->client_secret = $client_secret;
+		$this->app_id = $app_id;
+		$this->app_secret = $app_secret;
 	}
 
 	/**
@@ -92,8 +92,8 @@ class Instagram
 	{
 		if($code){
 			$data = [
-				'client_id' => $this->client_id,
-				'client_secret' => $this->client_secret,
+				'app_id' => $this->app_id,
+				'app_secret' => $this->app_secret,
 				'grant_type' => 'authorization_code',
 				'redirect_uri' => $this->redirect_uri,
 				'code' => $code
@@ -122,13 +122,13 @@ class Instagram
 	 * @return string
 	 * @throws Exception
 	 */
-	public function getLoginURL($scope = 'basic')
+	public function getLoginURL($scope = 'user_profile,user_media')
 	{
 		if(!$this->redirect_uri) {
 			throw new Exception('You must provide a "redirect_uri".', 400);
 		}
 
-		return $this->auth_url.'?client_id='.$this->client_id.'&redirect_uri='.$this->redirect_uri.'&response_type=code&scope='.$scope;
+		return $this->auth_url.'?app_id='.$this->app_id.'&redirect_uri='. urlencode($this->redirect_uri) .'&response_type=code&scope='.$scope;
 	}
 
 	/**
